@@ -7,6 +7,7 @@ import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
 import java.io.Reader
+import java.lang.Exception
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -79,13 +80,18 @@ class Network(val listener: UpdateData, val handler: Handler) {
         for (index in 0 until jsonArrayItems.length()) {
             val jsonElement: JSONObject = jsonArrayItems[index] as JSONObject
             val jsonVolumeInfo = jsonElement.getJSONObject("volumeInfo")
-
-            
-            val booksItemInfo = VolumeInfo(
-                jsonVolumeInfo.getString("title") ?: "N/A",
-                jsonVolumeInfo.getString("subtitle") ?: "N/A"
-            )
-
+            var booksItemInfo : VolumeInfo
+            try {
+                 booksItemInfo = VolumeInfo(
+                    jsonVolumeInfo.getString("title"),
+                    jsonVolumeInfo.getString("subtitle")
+                )
+            }catch (exception: Exception) {
+                 booksItemInfo = VolumeInfo(
+                    "N/A",
+                    "N/A"
+                )
+            }
             booksItemDescription = ItemsDescription(booksItemInfo)
             booksListItemsDescription.add(booksItemDescription)
 
