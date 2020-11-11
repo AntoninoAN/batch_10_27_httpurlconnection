@@ -36,16 +36,18 @@ class Network(val listener: UpdateData, val handler: Handler) {
         this.bookType = bookType
     }
 
-    private val URI = Uri.parse("$BASE_URL$ENDPOINT").buildUpon()
-        .appendQueryParameter(Q_PARAM, "$bookTitle")
-        .appendQueryParameter(MAX_RESULTS_PARAM, "$bookMaxResult")
-        .appendQueryParameter(PRINT_TYPE_PARAM, "$bookType")
-        .build()
+    private val URI by lazy {
+        Uri.parse("$BASE_URL$ENDPOINT").buildUpon()
+            .appendQueryParameter(Q_PARAM, "$bookTitle")
+            .appendQueryParameter(MAX_RESULTS_PARAM, "$bookMaxResult")
+            .appendQueryParameter(PRINT_TYPE_PARAM, "$bookType")
+            .build()
+    }
 
-    private val url: URL = URL(URI.toString())
+   // private val url: URL = URL(URI.toString())
 
     fun configureNetworkConnection() {
-
+        val url: URL = URL(URI.toString())
         val httpUrlConnection = url.openConnection() as HttpURLConnection
         httpUrlConnection.readTimeout = 10000
         httpUrlConnection.connectTimeout = 10000

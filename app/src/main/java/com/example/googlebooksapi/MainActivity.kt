@@ -25,11 +25,15 @@ class MainActivity : AppCompatActivity(), UpdateData {
         val etInput = findViewById<TextView>(R.id.et_search_title)
         val button = findViewById<ImageButton>(R.id.btn_search)
         val spinner = findViewById<Spinner>(R.id.sp_book_types)
+        val arrayAdapter = ArrayAdapter<String>(this,
+        android.R.layout.simple_list_item_1,
+        resources.getStringArray(R.array.print_type_options))
+        spinner.adapter = arrayAdapter
 
         button.setOnClickListener {
             checkNetworkStatus(etInput.text.toString(),
                 numPicker.value.toString(),
-                "5")
+                spinner.selectedItem.toString())
         }
 
 
@@ -61,10 +65,10 @@ class MainActivity : AppCompatActivity(), UpdateData {
     }
 
     override fun sendData(booksResponse: BooksResponse) {
-        Toast.makeText(
-            this, booksResponse.toString(),
-            Toast.LENGTH_SHORT
-        ).show();
+        val fragment = FragmentDisplayBooks.newInstance(booksResponse)
+        supportFragmentManager.beginTransaction()
+            .add(R.id.display_fragment_container, fragment)
+            .commit()
     }
 
 }
